@@ -31,15 +31,15 @@
     if ($user['coinamount'] >= $reward[0]['coinprice']) {
       $balance = $user['coinamount'] - $reward[0]['coinprice'];
       $stmt = $pdo->query("UPDATE users SET coinamount='$balance' where phone='$phone'");
-      $stmt->execute();
+			$stmt->execute();
     }
     else {
-      header('HTTP/1.1 9999 Not Enough');
+      header('HTTP/1.1 9999 NOT ENOUGH COIN');
       die(json_encode(array('message' => 'NOT ENOUGH COIN', 'code' => 9999)));
     }
   }
   else {
-    header('HTTP/1.1 9998 Error');
+    header('HTTP/1.1 9998 REWARD DOES NOT EXIST');
     die(json_encode(array('message' => 'REWARD DOES NOT EXIST', 'code' => 9998)));
   }
 
