@@ -140,7 +140,7 @@
 			transform-origin: 50% 50%;
 			transform: rotate(0) translate(0,0);
 		}
-		
+
 		@keyframes ro {
 			100% {
 				transform: rotate(-360deg) translate(0,0);
@@ -228,12 +228,44 @@
 									});
 								},
 								error : function(request, status, error) {
-									swal.fire({
-										title: "Unfortunately, you don't have enough coins.",
-										icon: "error",
-										confirmButtonColor: '#ea5455',
-										footer: '<a href="deal.php" style="font-weight: bold; color: #2196f3;">Click here to get more!</a>'
-									});
+									if (request.status == 404) { // 404 NOT FOUND ERROR
+										swal.fire({
+											title: "404 Error Occured",
+											text: "Please contact our support team.",
+											icon: "error",
+											confirmButtonColor: '#ea5455',
+										});
+									}
+									else if (request.status == 500) { // 500 INTERNAL SERVER ERROR
+										swal.fire({
+											title: "500 Error Occured",
+											text: "Please contact our support team.",
+											icon: "error",
+											confirmButtonColor: '#ea5455',
+										});
+									}
+									else { // No HTTP Requests Error
+										var errorJSON = jQuery.parseJSON(request.responseText);
+										var errorCode = errorJSON.code;
+									}
+									if (errorCode == 9999) { // CUSTOM 9999 ERROR
+										swal.fire({
+											title: "Oops. It seems like you don't have enough coins.",
+											icon: "error",
+											confirmButtonColor: '#ea5455',
+											footer: '<a href="deal.php" style="font-weight: bold; color: #2196f3;">Click here to get more!</a>'
+										});
+									}
+									else if (errorCode == 9998) { // CUSTOM 9998 ERROR
+										swal.fire({
+											title: "The reward you chose does not exist!",
+											text: "Please refresh the reward page.",
+											icon: "error",
+											confirmButtonColor: '#ea5455',
+										}).then(() => {
+											window.location.href = "rewardpage.php";
+										});
+									}
 								}
 						});
 					}
